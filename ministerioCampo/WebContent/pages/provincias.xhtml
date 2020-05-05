@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/templates/modelo.xhtml">
+
+	<ui:define name="conteudo">
+
+		<h:form id="frmListagem">
+			<p:panel header="Provincias - Listagem">
+				<p:dataTable id="tabListagem"
+					emptyMessage="Não foi encontrado registro algum!" paginator="true"
+					value="#{provinciaBean.provincias}" var="cursorprovincia" rows="5">
+					<!-- Vincula com o modelo para trazer uma lista -->
+					<f:facet name="header">
+						<p:commandButton value="Novo"
+							oncomplete="PF('dialProvincia').show();"
+							actionListener="#{provinciaBean.novo}"
+							update=":frmCadastro:panlCadastro" />
+					</f:facet>
+
+					<p:column headerText="Nome" sortBy="#{cursorprovincia.nomeProvincia}"
+						filterBy="#{cursorprovincia.nomeProvincia}">
+						<h:outputText value="#{cursorprovincia.nomeProvincia}" />
+					</p:column>
+
+					<p:column headerText="Sigla" sortBy="#{cursorprovincia.siglaProvincia}">
+						<h:outputText value="#{cursorprovincia.siglaProvincia}" />
+					</p:column>
+
+					<p:column headerText="Opções">
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{provinciaBean.excluir}"
+							update=":msn :frmListagem:tabListagem">
+							<p:confirm header="Confirmação"
+								message="Deseja realmente excluir a provincia?"
+								icon="ui-icon-alert" />
+							<f:attribute name="provinciaSeleccionada"
+								value="#{cursorprovincia}" />
+						</p:commandButton>
+
+						<p:commandButton icon="ui-icon-pencil"
+							actionListener="#{provinciaBean.editar}"
+							update=":msn :frmCadastro:panlCadastro"
+							oncomplete="PF('dialProvincia').show();">
+							<f:attribute name="provinciaSeleccionada"
+								value="#{cursorprovincia}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+				<!-- Caixa de confirmação  liga co o p confirm-->
+				<p:confirmDialog global="true">
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</p:panel>
+		</h:form>
+		<!-- Janela flutante - dialogo-->
+		<p:dialog header="Cadastro - Provincias" widgetVar="dialProvincia"
+			draggable="false" resizable="false" modal="true">
+			<h:form id="frmCadastro">
+				<h:panelGrid id="panlCadastro" columns="2">
+					<p:outputLabel value="Nome:" />
+					<p:inputText size="30" maxlength="50"
+						value="#{provinciaBean.provincia.nomeProvincia}" />
+
+					<p:outputLabel value="Sigla:" />
+					<p:inputText size="10" maxlength="3"
+						value="#{provinciaBean.provincia.siglaProvincia}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar"
+						actionListener="#{provinciaBean.salvar}"
+						update=":msn :frmCadastro:panlCadastro :frmListagem:tabListagem" />
+					<p:commandButton value="Fechar"
+						oncomplete="PF('dialProvincia').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

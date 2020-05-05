@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+    
+    <!-- Configurações com o Banco de Dados -->
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/db_webjpa</property>
+		<property name="hibernate.connection.username">postgres</property>
+		<property name="hibernate.connection.password">postgres</property>
+
+		<!-- Dialecto SQL do PostgreSQL -->
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
+        
+         <!-- Pool de conexões -->
+		<property name="hibernate.connection.pool_size">1</property>
+
+		<!-- Gerenciamento do contexto da sessão -->
+		<property name="hibernate.current_session_context_class">thread</property>
+
+		<!-- Cache do segundo nivel -->
+		<property name="hibernate.cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+		<!--Mostra os sql gerrados na consola -->
+		<property name="hibernate.show_sql">true</property>
+
+		<!-- Configurações para criação as tabelas no Banco de Dados -->
+		<property name="hibernate.hbm2ddl.auto">validate</property>
+
+		<!-- Mapemento das classes modelos -->
+		<mapping class="ministerioCampo.dominio.Anciao" />
+		<mapping class="ministerioCampo.dominio.Cidade" />
+		<mapping class="ministerioCampo.dominio.Congregacao" />
+		<mapping class="ministerioCampo.dominio.Provincia" />
+		<mapping class="ministerioCampo.dominio.Pais" />
+		<mapping class="ministerioCampo.dominio.Pessoa" />
+		<mapping class="ministerioCampo.dominio.Publicador" />
+		<mapping class="ministerioCampo.dominio.Usuario" />
+	</session-factory>
+</hibernate-configuration>

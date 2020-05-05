@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/templates/modelo.xhtml">
+
+	<ui:define name="conteudo">
+
+		<h:form id="frmListagem">
+			<p:panel header="Publicadores - Listagem">
+				<p:dataTable id="tabListagem"
+					emptyMessage="Não foi encontrado registro algum!" paginator="true"
+					value="#{publicadorBean.publicadores}" var="cursorpublicador"
+					rows="5">
+					<f:facet name="header">
+						<p:commandButton value="Novo"
+							oncomplete="PF('dialPublicador').show();"
+							actionListener="#{publicadorBean.novo}"
+							update=":msn :frmCadastro:panlCadastro" />
+					</f:facet>
+
+					<p:column headerText="Nome">
+						<h:outputText value="#{cursorpublicador.pessoa.nome}" />
+					</p:column>
+
+					<p:column headerText="Congregação">
+						<h:outputText value="#{cursorpublicador.congregacao.nome}" />
+					</p:column>
+
+					<p:column headerText="Baptizado">
+						<h:outputText value="#{cursorpublicador.baptizado}" />
+					</p:column>
+
+					<p:column headerText="Data Baptismo">
+						<h:outputText value="#{cursorpublicador.dataBaptismo}" />
+					</p:column>
+
+					<p:column headerText="Opções">
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{publicadorBean.excluir}"
+							update=":msn :frmListagem:tabListagem">
+							<p:confirm header="Confirmação"
+								message="Deseja realmente excluir o Publicador?"
+								icon="ui-icon-alert" />
+							<f:attribute name="publicadorSeleccionado"
+								value="#{cursorpublicador}" />
+						</p:commandButton>
+
+						<p:commandButton icon="ui-icon-pencil"
+							actionListener="#{publicadorBean.editar}"
+							update=":msn :frmCadastro:panlCadastro"
+							oncomplete="PF('dialPublicador').show">
+							<f:attribute name="publicadorSeleccionado"
+								value="#{cursorpublicador}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+
+				<p:confirmDialog global="true">
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</p:panel>
+		</h:form>
+		<!-- Janela flutante - dialogo-->
+		<p:dialog header="Cadastro - Publicadores" widgetVar="dialPublicador"
+			draggable="false" resizable="false" modal="true">
+			<h:form id="frmCadastro">
+				<h:panelGrid id="panlCadastro" columns="2">
+					<p:outputLabel value="Pessoa:" />
+					<p:selectOneMenu filter="true"
+						value="#{publicadorBean.publicador.pessoa}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione uma pessoa!" />
+						<f:selectItems value="#{publicadorBean.pessoas}"
+							var="cursorPessoa" itemValue="#{cursorPessoa}"
+							itemLabel="#{cursorPessoa.nome}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Congregação:" />
+					<p:selectOneMenu filter="true"
+						value="#{publicadorBean.publicador.congregacao}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione uma congregação!" />
+						<f:selectItems value="#{publicadorBean.congregacoes}"
+							var="cursorCongregacao" itemValue="#{cursorCongregacao}"
+							itemLabel="#{cursorCongregacao.nome}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Baptizado:" />
+					<p:selectOneRadio>
+						<f:selectItem itemValue="Sim" itemLabel="Sim" />
+						<f:selectItem itemValue="Nao" itemLabel="Não" />
+					</p:selectOneRadio>
+
+					<p:outputLabel for="dataCadastro" value="Data Baptismo:" />
+					<p:calendar id="dataCadastro"
+						value="#{publicadorBean.publicador.dataBaptismo}" size="10"
+						locale="pt_PT" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar"
+						actionListener="#{publicadorBean.salvar}" />
+					<p:commandButton value="Fechar"
+						oncomplete="PF('dialPublicador').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

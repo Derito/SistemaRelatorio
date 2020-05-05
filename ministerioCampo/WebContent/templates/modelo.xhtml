@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<h:title>Relatório de Campo</h:title>
+	<h:outputStylesheet library="css" name="estilos.css" />
+</h:head>
+<h:body>
+	<p:growl id="msn" />
+	<div id="geral">
+		<div id="topo" class="divTopo">
+			<p:graphicImage library="images" name="biblia.jpg"
+				styleClass="imagemCentralizada" />
+		</div>
+
+		<div id="cabecalho" class="divCabecalho">
+			<h:form id="frmMenu">
+				<p:menubar>
+					<p:submenu label="Arquivo">
+						<p:menuitem value="Sair" />
+					</p:submenu>
+
+					<p:submenu label="Cadastros" rendered="#{autenticacaoBean.temPermissao(['A' , 'S', 'P'])}">
+						<p:menuitem value="Provincias" url="/pages/provincias.xhtml"/>
+						<p:menuitem value="Cidades" url="/pages/cidades.xhtml"/>
+						<p:menuitem value="Congregações" url="/pages/congregacao.xhtml"/>
+						<p:menuitem value="Endereço" url="/pages/endereco.xhtml"/>
+						<p:menuitem value="Pessoa" url="/pages/pessoa.xhtml"/>
+						<p:menuitem value="Usuário" url="/pages/usuario.xhtml"/>
+						<p:menuitem value="Publicador" url="/pages/publicador.xhtml"/>
+
+					</p:submenu>
+
+					<p:submenu label="Relatório">
+						<p:menuitem value="Report" url="pages/report.xhtml" />
+					</p:submenu>
+
+					<p:submenu label="Ajuda">
+						<p:menuitem value="Sobre o Sistema" />
+					</p:submenu>
+				</p:menubar>
+			</h:form>
+		</div>
+		<div id="conteudo">
+			<ui:insert name="conteudo" />
+		</div>
+	</div>
+
+</h:body>
+</html>

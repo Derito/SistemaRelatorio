@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/templates/modelo.xhtml">
+	<ui:define name="conteudo">
+
+		<h:form id="frmListagem">
+			<p:panel header="Congregações - Listagem">
+				<p:dataTable id="tabListagem"
+					emptyMessage="Não foi encontrado registro algum!" paginator="true"
+					value="#{congregacaoBean.congregacoes}" var="cursorcongregacao"
+					rows="5">
+					<f:facet name="header">
+						<p:commandButton value="Novo"
+							oncomplete="PF('dialCongregacao').show();"
+							actionListener="#{congregacaoBean.novo}"
+							update=":msn :frmCadastro:panlCadastro">
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+					</f:facet>
+
+					<p:column headerText="Nome" sortBy="#{cursorcongregacao.nome}"
+						filterBy="#{cursorcongregacao.nome}">
+						<h:outputText value="#{cursorcongregacao.nome}" />
+					</p:column>
+
+					<p:column headerText="Pais"
+						sortBy="#{cursorcongregacao.pais}"
+						filterBy="#{cursorcongregacao.pais}">
+						<h:outputText
+							value="#{cursorcongregacao.pais.nomePais}" />
+						<h:outputText value=" - " />
+						<h:outputText value="#{cursorcongregacao.pais.sigla}" />
+					</p:column>
+
+					<p:column headerText="Opções">
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{congregacaoBean.excluir}"
+							update=":msn :frmListagem:tabListagem">
+							<p:confirm header="Confirmação"
+								message="Deseja realmente excluir a congregação?"
+								icon="ui-icon-alert" />
+							<f:attribute name="congregacaoSeleccionada"
+								value="#{cursorcongregacao}" />
+						</p:commandButton>
+
+						<p:commandButton icon="ui-icon-pencil"
+							actionListener="#{congregacaoBean.editar}"
+							update=":msn :frmCadastro:panlCadastro"
+							oncomplete="PF('dialCongregacao').show">
+							<f:attribute name="congregacaoSeleccionada"
+								value="#{cursorcongregacao}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+
+				<p:confirmDialog global="true">
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</p:panel>
+		</h:form>
+		<!-- Janela flutante - dialogo-->
+		<p:dialog header="Cadastro - Congregações" widgetVar="dialCongregacao"
+			draggable="false" resizable="false" modal="true">
+			<h:form id="frmCadastro">
+				<h:panelGrid id="panlCadastro" columns="2">
+					<p:outputLabel value="Nome:" />
+					<p:inputText size="30" maxlength="50"
+						value="#{congregacaoBean.congregacao.nome}" required="true"
+						requiredMessage="O campo nome é obrigatório!" />
+
+					<p:outputLabel value="Endereço:" />
+					<p:selectOneMenu filter="true"
+						value="#{congregacaoBean.congregacao.pais}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="O campo Pais é obrigatório!">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione um Pais!" />
+						<f:selectItems value="#{congregacaoBean.paises}"
+							var="cursorEndereco" itemValue="#{cursorPais}"
+							itemLabel="#{cursorPais.pais.nomePais}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar"
+						actionListener="#{congregacaoBean.salvar}"
+						update=":msn :frmCadastro:panlCadastro :frmListagem:tabListagem" />
+					<p:commandButton value="Fechar"
+						oncomplete="PF('dialCongregacao').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
